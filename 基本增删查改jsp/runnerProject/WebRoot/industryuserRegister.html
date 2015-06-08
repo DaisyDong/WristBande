@@ -1,0 +1,28 @@
+<html>
+  <head>
+    <title>industryuserRegister.html</title>
+  </head>
+  <body>
+    <h1 align="center">行业用户注册</h1>
+    <form action="toolsPackage/industryuserInsertServlet" method="post">
+    <input type="hidden" name="pagetype" value="industryRegister">
+    <input type="hidden" name="groupNumber" value="0">
+    <table align="center">
+    	<tr><td>群组名</td><td><input type="text" name="groupName"></td></tr>
+    	<tr><td>密码</td><td><input type="password" name="password"></td></tr>
+    	<tr><td>确认密码</td><td><input type="password" name="repassword"></td></tr>
+    	<tr><td>群主名</td><td><input type="text" name="groupLeader"></td></tr>
+    	<tr><td>用户密码</td><td><input type="password" name="userpassword"></td></tr>
+    	<tr><td>确认用户密码</td><td><input type="password" name="reuserpassword"></td></tr>
+    	<tr><td>初始默认群组上限人数</td><td><input type="text" disabled="disabled" value="200" name="maxNumber"></td></tr>
+    	<tr><td>群组组织</td><td><input type="text" name="GroupOrganization"></td></tr>
+    	<tr><td>群组地址</td><td><input type="text" name="GroupAddress"></td></tr>
+    	<tr><td>群组信息</td><td><input type="text" name="GroupData"></td></tr>
+    </table>
+    <table align="center">
+    	<tr><td><input type="submit" value="提交"></td>
+    	<td><input type="button" value="取消" onclick="window.close()"></td></tr>
+    </table>
+    </form>
+  </body>
+</html>

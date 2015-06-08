@@ -1,0 +1,24 @@
+<html>
+  <head>
+    <title>normalUserRegister.html</title>
+  </head>
+  <body>
+    <h1 align="center">用户注册</h1>
+    <form method="post" action="toolsPackage/userInsertServlet">
+    <input type="hidden" name="pageType" value="userRegister">
+    <table align="center">
+    	<tr><td>昵称</td><td><input type="text" name="nickname"></td></tr>
+    	<tr><td>用户名</td><td><input type="text" name="username"></td></tr>
+    	<tr><td>密码</td><td><input type="password" name="password"></td></tr>
+    	<tr><td>密码确认</td><td><input type="password" name="repassword"></td></tr>
+    	<tr><td>邮箱</td><td><input type="email" name="email"></td></tr>
+    	<tr><td>电话</td><td><input type="text" name="phone"></td></tr>
+    	<tr><td>性别</td><td><input type="radio" name="sex" value="f" checked="checked">女
+    	<input type="radio" name="sex" value="m">男</td></tr>
+    </table>
+    <table align="center">
+    	<input type="submit" value="提交"><input type="button" value="取消" onclick="window.close()">
+    </table>
+    </form>
+  </body>
+</html>
