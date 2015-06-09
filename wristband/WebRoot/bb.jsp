@@ -1,32 +1,31 @@
-<%@ page language="java" import="java.util.*" pageEncoding="ISO-8859-1"%>
+<%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+<%@page import="java.io.*" %>
+<%@page import="java.sql.*" %>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-  <head>
-    <base href="<%=basePath%>">
-    
-    <title>My JSP 'bb.jsp' starting page</title>
-    
-	<meta http-equiv="pragma" content="no-cache">
-	<meta http-equiv="cache-control" content="no-cache">
-	<meta http-equiv="expires" content="0">    
-	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-	<meta http-equiv="description" content="This is my page">
-	<!--
-	<link rel="stylesheet" type="text/css" href="styles.css">
-	-->
-
-  </head>
-  
-  <body>
-   <%
-    request.setCharacterEncoding("utf-8");
-    String txtMsg = request.getParameter("str"); 
-    System.out.println(txtMsg);
-  %> 
-  </body>
-</html>
+ 
+   <% 
+   String lng= request.getParameter("lng"); 
+   String lat=request.getParameter("lat"); 
+   String[] lngs = lng.split(",");
+   String[] lats = lat.split(",");
+   int n = 1;
+   try{
+   	Class.forName("com.mysql.jdbc.Driver");
+   	Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/band","root","ymzmdx");
+   	Statement st = conn.createStatement();
+   	for(int i = 0;i < lngs.length;i++){
+   		float a = Float.parseFloat(lngs[i]);
+   		float b = Float.parseFloat(lats[i]);
+   		String sql = "insert into elecFence values("+a+","+b+")";
+   		System.out.println(sql); 
+   		st.executeUpdate(sql);
+   }
+   }catch(Exception e){
+   		n = 2;
+   } 
+   out.println(n);
+   out.flush(); 
+   	%>  

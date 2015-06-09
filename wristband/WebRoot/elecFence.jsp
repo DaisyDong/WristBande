@@ -47,86 +47,98 @@ body {
 	<script type="text/javascript"
 		src="http://webapi.amap.com/maps?v=1.3&key=e02d98c99454566cb174eb717540a320">
 		
-	</script>
-	<%
-		Connection conn = null;
-		Statement st = null;
-		ResultSet rs = null;
-		//String id = request.getParameter("userid");
-		String id = "001";
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/band", "root", "ymzmdx");
-			st = conn.createStatement();
-			String sql = "select lng,lat from earth where id='" + id + "';";
-			System.out.println(sql);
-			rs = st.executeQuery(sql);
-			while (rs.next()) {
-				lnglat[count][0] = rs.getFloat("lng"); //经度
-				System.out.println("经度" + lnglat[count][0]);
-				lnglat[count++][1] = rs.getFloat("lat"); //纬度
-				System.out.println("为父" + lnglat[count - 1][1]);
-			}
-			System.out.println(count);
-			st.close();
-			conn.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	%>
+	</script> 
 	<script type="text/javascript">
-		(function() {
-			var map = new AMap.Map('container');
-			map.setZoom(5);
+		var xmlHttp;
+		var lng = [];
+		var lat =[];
+		var map;
+		var mouseTool;
+		(function(){
+			map = new AMap.Map('container');
+			map.setZoom(18);
 			map.plugin([ "AMap.MapType", "AMap.OverView", "AMap.Scale",
 					"AMap.ToolBar" ], function() {
+				var type = new AMap.MapType();
+				map.addControl(type);
 				var tool = new AMap.ToolBar();
 				map.addControl(tool);
 				var view = new AMap.OverView();
 				map.addControl(view);
 				var scale = new AMap.Scale();
 				map.addControl(scale);
-			});
-			var lng = [];
-			var lat = [];
+			}); 
 			map.plugin([ "AMap.MouseTool" ], function() {
 				mouseTool = new AMap.MouseTool(map);
 				tag = mouseTool.polyline().getPath();
-			});
-			var str1 = 'dddd';
-			//document.form.lng.value = lng;
-			// document.form.lat.value = lat;
-			document.form.str.value = str1;
-			var formObj = document.getElementById('passForm');
-			formObj.submit(); 
-			var i = 0;
-			AMap.event.addListener(map, "click", function(e) {
-				lng[i] = e.lnglat.getLng();
-				lat[i] = e.lnglat.getLat(); 
+			});     
+			var i = 0; 
+			AMap.event.addListener(map, "click", function(e) { 
+				lng[i] = e.lnglat.getLng(); 
+				lat[i] = e.lnglat.getLat();  
 				i++;
 
-			});
-			AMap.event.addListener(map, "rightclick", function(e) {
-				var str1 = 'dddd';
-				document.form.lng.value = lng;
-				document.form.lat.value = lat;
-				document.form.str.value = str1;
-				var formObj = document.getElementById('passForm');
-				formObj.submit();
+			}); 
+			
+			AMap.event.addListener(map, "rightclick", function(e) { 
+				//document.write("右击了");
+				 
+				//var test = JSON.stringify(lnglat); 
+				//var test = lnglat.toString();
+				//document.write(test);
+				 createXMLHttpRequest();
+				 xmlHttp.onreadystatechange = writeUserIDInfo; 
+				 xmlHttp.open("POST","bb.jsp",true);
+				 xmlHttp.setRequestHeader("Content-type","application/x-www-form-urlencoded"); 
+				 xmlHttp.send("lng="+lng+"&lat="+lat); 
 			});
 		})();
+		var polyline1;
+		function writeUserIDInfo(){
+			if(xmlHttp.readyState==4){
+				if(xmlHttp.status==200){
+					var news = xmlHttp.responseText; 
+					if(news == 1){
+					//mouseTool.close(true);
+					var arr = new Array();
+					for(var a = 0;a < lng.length;a++)
+						arr.push(new AMap.LngLat(lng[a],lat[a])); 
+					arr.push(new AMap.LngLat(lng[0],lat[0]));
+					polyline1 = new AMap.Polyline({
+					map:map,
+					path:arr,
+					strokeColor:"red",
+					strokeOpacacity:0.4,
+					strokeWeight:3 
+					});
+					map.setFitView();
+					}
+					else if(news == 2){
+					 	alter("插入失败");
+					}
+					
+				}
+			}
+		}
+		
+		function checkTrack(){
+			
+		}
+		function createXMLHttpRequest() {
+			try{
+				xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");
+			}catch(e){
+				try{
+					xmlHttp = new ActiveObject("Microsoft.XMLHTTP"); 
+				}catch(e){
+					try{
+						xmlHttp = new XMLHttpRequest();
+					}catch(e){
+						alter("您的浏览器不支持AJAX!");
+					}
+				}
+			}
+		} 
 	</script>
-	<form method="post" action="elecFence.jsp" id="passForm">
-		<input id='lng' type='hidden' name="lng"> 
-		<input id='lat'	type='hidden' name="lat"> 
-		<input id='str' type='hidden' name="str">
-	</form>
-	<%
-	request.setCharacterEncoding("utf-8");
-	String txtMsg = request.getParameter("str");
-	System.out.println(txtMsg);
-	 %>
-
 </body>
 </html>
