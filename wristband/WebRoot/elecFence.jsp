@@ -76,8 +76,7 @@ body {
 			AMap.event.addListener(map, "click", function(e) { 
 				lng[i] = e.lnglat.getLng(); 
 				lat[i] = e.lnglat.getLat();  
-				i++;
-
+				i++; 
 			}); 
 			
 			AMap.event.addListener(map, "rightclick", function(e) { 
@@ -115,15 +114,10 @@ body {
 					}
 					else if(news == 2){
 					 	alter("插入失败");
-					}
-					
+					} 
 				}
 			}
-		}
-		
-		function checkTrack(){
-			
-		}
+		} 
 		function createXMLHttpRequest() {
 			try{
 				xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");
